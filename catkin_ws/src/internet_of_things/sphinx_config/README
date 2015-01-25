@@ -1,0 +1,17 @@
+Basic things needed to get speech recognition engine
+1. Language Model
+2. Dictionary
+3. Grammar - optional, to enforce structure and rules on language
+
+Language Model & Dictionary
+1. Create a file called corpus.txt. Add all the sentences you would like to detect.
+2. Upload corpus.txt at http://www.speech.cs.cmu.edu/tools/lmtool.html and generate dict and lm files.
+   You can improve the accuracy of the dictionary by tweaking the syllables in the auto-generated words in the dictionary. Not necessary most of the time.
+
+Grammar
+Need to create a grammar file in JSGF fromat. Make sure that the words in the grammar are in the same case as those in the dictionary.
+
+Useful link for more info - https://code.google.com/p/ros-pocketsphinx-speech-recognition-tutorial/wiki/Tutorial
+
+Convert JSGF grammar files into fsg format needed by gstreamer's pocketsphinx element
+    sphinx_jsgf2fsg -jsgf grammar.jsgf -fsg grammar.fsg

@@ -1,0 +1,74 @@
+Language model created by QuickLM on Sun Jan 11 11:42:50 EST 2015
+Copyright (c) 1996-2010 Carnegie Mellon University and Alexander I. Rudnicky
+
+The model is in standard ARPA format, designed by Doug Paul while he was at MITRE.
+
+The code that was used to produce this language model is available in Open Source.
+Please visit http://www.speech.cs.cmu.edu/tools/ for more information
+
+The (fixed) discount mass is 0.5. The backoffs are computed using the ratio method.
+This model based on a corpus of 8 sentences and 15 words
+
+\data\
+ngram 1=15
+ngram 2=22
+ngram 3=14
+
+\1-grams:
+-0.8751 </s> -0.3010
+-0.8751 <s> -0.2304
+-1.7782 CLOSE -0.2937
+-1.7782 FIVE -0.2389
+-1.7782 KANGAROO -0.2389
+-1.7782 MAGICALLY -0.2937
+-1.7782 MAMAROO -0.2389
+-1.4771 MOTION -0.2304
+-1.7782 MOVING -0.2389
+-1.7782 OPEN -0.2389
+-1.7782 ORIGAMI -0.2389
+-1.7782 SPEED -0.2937
+-1.7782 START -0.2937
+-1.7782 STROLLER -0.2389
+-1.7782 TERMINATE -0.2863
+
+\2-grams:
+-1.2041 <s> CLOSE 0.0000
+-1.2041 <s> MAGICALLY 0.0000
+-1.2041 <s> MAMAROO 0.0000
+-1.2041 <s> MOTION -0.1761
+-1.2041 <s> ORIGAMI 0.0000
+-1.2041 <s> SPEED 0.0000
+-1.2041 <s> START 0.0000
+-1.2041 <s> TERMINATE 0.0000
+-0.3010 CLOSE STROLLER 0.0000
+-0.3010 FIVE </s> -0.3010
+-0.3010 KANGAROO </s> -0.3010
+-0.3010 MAGICALLY OPEN 0.0000
+-0.3010 MAMAROO </s> -0.3010
+-0.6021 MOTION </s> -0.3010
+-0.6021 MOTION KANGAROO 0.0000
+-0.3010 MOVING </s> -0.3010
+-0.3010 OPEN </s> -0.3010
+-0.3010 ORIGAMI </s> -0.3010
+-0.3010 SPEED FIVE 0.0000
+-0.3010 START MOVING 0.0000
+-0.3010 STROLLER </s> -0.3010
+-0.3010 TERMINATE MOTION -0.1761
+
+\3-grams:
+-0.3010 <s> CLOSE STROLLER
+-0.3010 <s> MAGICALLY OPEN
+-0.3010 <s> MAMAROO </s>
+-0.3010 <s> MOTION KANGAROO
+-0.3010 <s> ORIGAMI </s>
+-0.3010 <s> SPEED FIVE
+-0.3010 <s> START MOVING
+-0.3010 <s> TERMINATE MOTION
+-0.3010 CLOSE STROLLER </s>
+-0.3010 MAGICALLY OPEN </s>
+-0.3010 MOTION KANGAROO </s>
+-0.3010 SPEED FIVE </s>
+-0.3010 START MOVING </s>
+-0.3010 TERMINATE MOTION </s>
+
+\end\

@@ -1,0 +1,10 @@
+<launch>
+
+  <include file="$(find openni_launch)/launch/openni.launch" />
+
+  <!-- <node pkg="baby_gate" name="kinect_imaq_depth" type="kinect_imaq_depth"/> -->
+  <node pkg="baby_gate" name="kinect_imaq_disparity" type="kinect_imaq_disparity"/> 
+  <node pkg="baby_gate" name="object_detector" type="object_detector"/>  
+  <!-- <node pkg="baby_gate" name="tracker" type="tracker"/> --> 
+
+</launch>
