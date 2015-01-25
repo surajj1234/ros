@@ -14,7 +14,7 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QLabel" name="vrStatusLabel">
+   <widget class="QLabel" name="vrLabel">
     <property name="geometry">
      <rect>
       <x>817</x>
@@ -27,7 +27,7 @@
      <string>VR Status</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_2">
+   <widget class="QLabel" name="mamaRooLabel">
     <property name="geometry">
      <rect>
       <x>817</x>
@@ -40,7 +40,7 @@
      <string>mamaRoo Status</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_3">
+   <widget class="QLabel" name="origamiLabel">
     <property name="geometry">
      <rect>
       <x>817</x>
@@ -53,54 +53,20 @@
      <string>Origami Status</string>
     </property>
    </widget>
-   <widget class="QLabel" name="vrStatusLabel_2">
-    <property name="geometry">
-     <rect>
-      <x>950</x>
-      <y>400</y>
-      <width>91</width>
-      <height>17</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Disconnected</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="mamaRooStatusLabel">
-    <property name="geometry">
-     <rect>
-      <x>950</x>
-      <y>440</y>
-      <width>91</width>
-      <height>17</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Disconnected</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="origamiStatusLabel">
-    <property name="geometry">
-     <rect>
-      <x>950</x>
-      <y>480</y>
-      <width>91</width>
-      <height>17</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Disconnected</string>
-    </property>
-   </widget>
    <widget class="QComboBox" name="demoComboBox">
     <property name="geometry">
      <rect>
-      <x>920</x>
-      <y>240</y>
+      <x>940</x>
+      <y>220</y>
       <width>81</width>
       <height>27</height>
      </rect>
     </property>
+    <item>
+     <property name="text">
+      <string>Monitor</string>
+     </property>
+    </item>
     <item>
      <property name="text">
       <string>ML</string>
@@ -115,8 +81,8 @@
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>830</x>
-      <y>250</y>
+      <x>850</x>
+      <y>230</y>
       <width>91</width>
       <height>20</height>
      </rect>
@@ -185,14 +151,82 @@
    <widget class="QPushButton" name="debugImageButton">
     <property name="geometry">
      <rect>
-      <x>840</x>
-      <y>150</y>
+      <x>810</x>
+      <y>300</y>
       <width>87</width>
       <height>27</height>
      </rect>
     </property>
     <property name="text">
      <string>Debug Image</string>
+    </property>
+   </widget>
+   <widget class="QSlider" name="thresholdSlider">
+    <property name="geometry">
+     <rect>
+      <x>810</x>
+      <y>340</y>
+      <width>160</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="value">
+     <number>50</number>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Horizontal</enum>
+    </property>
+   </widget>
+   <widget class="QLabel" name="thresholdLabel">
+    <property name="geometry">
+     <rect>
+      <x>990</x>
+      <y>340</y>
+      <width>58</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>TextLabel</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="vrStatusLabel">
+    <property name="geometry">
+     <rect>
+      <x>960</x>
+      <y>400</y>
+      <width>91</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>TextLabel</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="mamaRooStatusLabel">
+    <property name="geometry">
+     <rect>
+      <x>960</x>
+      <y>440</y>
+      <width>91</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>TextLabel</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="origamiStatusLabel">
+    <property name="geometry">
+     <rect>
+      <x>960</x>
+      <y>480</y>
+      <width>91</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>TextLabel</string>
     </property>
    </widget>
   </widget>

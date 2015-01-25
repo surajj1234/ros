@@ -31,6 +31,10 @@ DISCOVER = 2
 CONNECT = 3
 DO_NOTHING = 4
 
+STATUS_MAMAROO_CONNECTED = "mamaRoo_connected"
+STATUS_MAMAROO_DISCONNECTED = "mamaRoo_disconnected"
+
+
 class MamaRoo_BTController():
 
     def __init__(self):
@@ -38,8 +42,10 @@ class MamaRoo_BTController():
 
         rospy.init_node('mamaRoo_bt_controller')
         rospy.on_shutdown(self.shutdown)
-        rospy.Subscriber('voice_recognition/voice_commands', String, self.speech_callback)
         
+        rospy.Subscriber('voice_recognition/voice_commands', String, self.speech_callback)
+        self.statusPub = rospy.Publisher('mamaRoo_bt_controller/status', String, queue_size = 3)
+
         self.init_BT()
 
     def init_BT(self):
@@ -90,11 +96,14 @@ class MamaRoo_BTController():
         if self.testUnitFound == True:
             print("Connecting...")
             self.dongle.do_establish_link(self.testUnitID)
-        else:
-            print("Device Discovery Failure : No \"mamaRoo\" found!")
-            self.shutdown()
-        self.state = CONNECT
+            self.state = CONNECT
 
+        else:
+            print("Device Discovery Failure : No \"mamaRoo\" found! Retrying...")
+            
+            self.state = DISCOVER
+            self.dongle.do_discovery()
+ 
     def link_established_callback(self, status):
 
         if status == 0:     # Success
@@ -102,15 +111,21 @@ class MamaRoo_BTController():
             # Enable notifications from the custom mamaRoo data characteristic
             self.set_notify(True)
 
+            self.statusPub.publish(STATUS_MAMAROO_CONNECTED)
             self.testUnitConnected = True
             self.state = DO_NOTHING
         else:
-            print("Link Establish Failure : Unable to connect to \"mamaRoo\"")
-            self.shutdown()
+            print("Link Establish Failure : Unable to connect to \"mamaRoo\". Retrying...")
+            self.state = DISCOVER
+            self.dongle.do_discovery()
 
     def link_terminated_callback(self, status):
         print("Link terminated")
         self.testUnitConnected = False
+        self.statusPub.publish(STATUS_MAMAROO_DISCONNECTED)
+
+        self.state = DISCOVER
+        self.dongle.do_discovery()
 
     def notify_callback(self, handle, value, valueStr):
         

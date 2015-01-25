@@ -5,14 +5,18 @@ from std_msgs.msg import String
 
 import socket
 import sys
+import time
 
 SERVER_IP = "localhost"
-SERVER_PORT = 10001
+SERVER_PORT = 10000
 MESSAGE_SIZE = 1 
 
 TURN_LIGHTS_ON = 'L'
 TURN_LIGHTS_OFF = 'O'
 STROLLER_ACTUATE = 'A'
+
+STATUS_ORIGAMI_CONNECTED = "origami_connected"
+STATUS_ORIGAMI_DISCONNECTED = "origami_disconnected"
 
 
 class Origami_Network_Controller():
@@ -23,7 +27,8 @@ class Origami_Network_Controller():
         rospy.init_node('origami_network_controller')
         rospy.on_shutdown(self.shutdown)
         rospy.Subscriber('voice_recognition/voice_commands', String, self.speech_callback)
- 
+        self.statusPub = rospy.Publisher('origami_network_controller/status', String, queue_size = 3)
+        
         self.runProgram = True
         self.connStatus = False
 
@@ -44,6 +49,8 @@ class Origami_Network_Controller():
                 print >> sys.stderr, "Unable to connect, retrying..."
             else:
                 print >> sys.stderr, "Connected to Origami server"
+                time.sleep(3)
+                self.statusPub.publish(STATUS_ORIGAMI_CONNECTED)
                 self.connStatus = True
      
     def send_command(self, command):
@@ -67,10 +74,11 @@ class Origami_Network_Controller():
 
     def close_socket(self):
 
+        self.statusPub.publish(STATUS_ORIGAMI_DISCONNECTED)
         self.connStatus = False
         print >> sys.stderr, "Closing socket"
         self.sock.close()
-
+        
     def shutdown(self):
         '''Clean up'''
 

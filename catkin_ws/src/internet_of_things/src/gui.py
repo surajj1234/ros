@@ -23,10 +23,18 @@ DEMO_ML_DISABLE = "demo_ml_disable"
 
 TOGGLE_DEBUG_IMAGE = "toggle_debug_image"
 
+STATUS_VR_WORKING = "vr_working"
+STATUS_MAMAROO_CONNECTED = "mamaRoo_connected"
+STATUS_MAMAROO_DISCONNECTED = "mamaRoo_disconnected"
+STATUS_ORIGAMI_CONNECTED = "origami_connected"
+STATUS_ORIGAMI_DISCONNECTED = "origami_disconnected"
+
+
 class DemoGUI(QtGui.QMainWindow):
 
     # Create a signal to alert QT thread that a new image is available from ROS
     newImageSignal = QtCore.pyqtSignal() 
+    newStatusSignal = QtCore.pyqtSignal()
 
     def __init__(self):
         super(DemoGUI, self).__init__()
@@ -35,6 +43,13 @@ class DemoGUI(QtGui.QMainWindow):
         self.pixmap = None
 
         self.init_ros_stuff()
+        self.select_demo("Monitor")
+
+        self.vrStatus = "Not Working"
+        self.origamiStatus = "Disconnected"
+        self.mamaRooStatus = "Disconnected"
+
+        self.update_status_indicators()
 
     def init_gui(self):
 
@@ -43,6 +58,8 @@ class DemoGUI(QtGui.QMainWindow):
       
         # Connect signals to slots 
         self.newImageSignal.connect(self.update_gui_image)
+        self.newStatusSignal.connect(self.update_status_indicators)
+
         self.ui.demoComboBox.activated[str].connect(self.select_demo)
         self.ui.debugImageButton.clicked.connect(self.toggle_debug_image)
         
@@ -55,8 +72,12 @@ class DemoGUI(QtGui.QMainWindow):
         self.bridge = CvBridge()
         
         self.imageSub = rospy.Subscriber("baby_monitor/baby_monitor_image", Image, self.image_callback)
-        self.vrPub = rospy.Publisher('gui/vr_config', String, queue_size = 10)
-        self.mlPub = rospy.Publisher('gui/ml_config', String, queue_size = 10)
+        self.vrStatusSub = rospy.Subscriber("voice_recognition/status", String, self.vr_status_callback)
+        self.mamaRooStatusSub = rospy.Subscriber("mamaRoo_bt_controller/status", String, self.mamaRoo_status_callback)
+        self.origamiStatusSub = rospy.Subscriber("origami_network_controller/status", String, self.origami_status_callback)
+        
+        self.vrPub = rospy.Publisher('gui/vr_config', String, queue_size = 3)
+        self.mlPub = rospy.Publisher('gui/ml_config', String, queue_size = 3)
     
     
     def image_callback(self, data):
@@ -92,6 +113,9 @@ class DemoGUI(QtGui.QMainWindow):
     
     def select_demo(self, text):
         
+        if text == "Monitor":
+            self.mlPub.publish(DEMO_ML_DISABLE)
+            self.vrPub.publish(DEMO_VR_DISABLE)
         if text == "VR":
             self.mlPub.publish(DEMO_ML_DISABLE)
             self.vrPub.publish(DEMO_VR_ENABLE)
@@ -101,6 +125,56 @@ class DemoGUI(QtGui.QMainWindow):
 
     def toggle_debug_image(self):
         self.mlPub.publish(TOGGLE_DEBUG_IMAGE)
+
+    def vr_status_callback(self, msg):
+
+        if msg.data == STATUS_VR_WORKING:
+            self.vrStatus = "Working"
+            self.newStatusSignal.emit()
+
+    def mamaRoo_status_callback(self, msg):
+
+        if msg.data == STATUS_MAMAROO_CONNECTED:
+            self.mamaRooStatus = "Connected"
+            self.newStatusSignal.emit()
+        elif msg.data == STATUS_MAMAROO_DISCONNECTED:
+            self.mamaRooStatus = "Disconnected"
+            self.newStatusSignal.emit()
+        
+    def origami_status_callback(self, msg):
+
+        if msg.data == STATUS_ORIGAMI_CONNECTED:
+            self.origamiStatus = "Connected"
+            self.newStatusSignal.emit()
+        elif msg.data == STATUS_ORIGAMI_DISCONNECTED:
+            self.origamiStatus = "Disconnected"
+            self.newStatusSignal.emit()
+
+    def update_status_indicators(self):
+            
+            if self.vrStatus == "Working":
+                self.ui.vrStatusLabel.setText(self.vrStatus)
+                self.ui.vrStatusLabel.setStyleSheet('color: green')
+
+            elif self.vrStatus == "Not Working":
+                self.ui.vrStatusLabel.setText(self.vrStatus)
+                self.ui.vrStatusLabel.setStyleSheet('color: red')
+            
+            if self.mamaRooStatus == "Connected":
+                self.ui.mamaRooStatusLabel.setText(self.mamaRooStatus)
+                self.ui.mamaRooStatusLabel.setStyleSheet('color: green')
+
+            elif self.mamaRooStatus == "Disconnected":
+                self.ui.mamaRooStatusLabel.setText(self.mamaRooStatus)
+                self.ui.mamaRooStatusLabel.setStyleSheet('color: red')
+            
+            if self.origamiStatus == "Connected":
+                self.ui.origamiStatusLabel.setText(self.origamiStatus)
+                self.ui.origamiStatusLabel.setStyleSheet('color: green')
+
+            elif self.origamiStatus == "Disconnected":
+                self.ui.origamiStatusLabel.setText(self.origamiStatus)
+                self.ui.origamiStatusLabel.setStyleSheet('color: red')
 
     def shutdown(self):
         

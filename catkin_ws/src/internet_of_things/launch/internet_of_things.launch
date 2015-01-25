@@ -3,7 +3,7 @@
   <node pkg="internet_of_things" name="baby_monitor" type="baby_monitor"/>
   <node pkg="internet_of_things" name="voice_recognition" type="voice_recognition.py"/> 
   <node pkg="internet_of_things" name="origami_network_controller" type="origami_network_controller.py"/> 
-<!--  <node pkg="internet_of_things" name="mamaRoo_bt_controller" type="mamaRoo_bt_controller.py"/> -->
+  <node pkg="internet_of_things" name="mamaRoo_bt_controller" type="mamaRoo_bt_controller.py"/> 
   <node pkg="internet_of_things" name="gui" type="gui.py"/> 
 
 </launch>

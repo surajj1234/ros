@@ -14,6 +14,8 @@ pygst.require('0.10')
 gobject.threads_init()      # This is very important !
 import gst
 
+STATUS_VR_WORKING = "vr_working"
+
 class Voice_Recognition(object):
     """GStreamer/PocketSphinx Demo Application"""
 
@@ -23,11 +25,14 @@ class Voice_Recognition(object):
         rospy.init_node('voice_recognition')
         
         rospy.on_shutdown(self.shutdown)
-        self.pub = rospy.Publisher('voice_recognition/voice_commands', String, queue_size = 10)
+        
+        self.statusPub = rospy.Publisher('voice_recognition/status', String, queue_size = 3)
+        self.pub = rospy.Publisher('voice_recognition/voice_commands', String, queue_size = 3)
+        
         self.guiSub = rospy.Subscriber("gui/vr_config", String, self.gui_config)
-        self.vrPub = rospy.Publisher('gui/vr_config', String, queue_size = 10)
      
         self.init_gst()
+        self.firstResult = True
 
     def init_gst(self):
         """Initialize the speech components"""
@@ -51,7 +56,6 @@ class Voice_Recognition(object):
 
         self.pipeline.set_state(gst.STATE_PAUSED)
         rospy.sleep(1)
-        #self.enable_VR(True)
 
     def gui_config(self, msg):
 
@@ -95,6 +99,11 @@ class Voice_Recognition(object):
         """Insert the final result."""
        
         print >> sys.stderr, hyp
+        
+        if self.firstResult == True:
+            self.statusPub.publish(STATUS_VR_WORKING)
+            self.firstResult = False
+
         self.pub.publish(hyp)
 
     def enable_VR(self, enable_VR):
