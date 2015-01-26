@@ -7,7 +7,9 @@ import socket
 import sys
 import time
 
-SERVER_IP = "localhost"
+SERVER_IP = "10.10.10.181"
+#SERVER_IP = "localhost"
+
 SERVER_PORT = 10000
 MESSAGE_SIZE = 1 
 
