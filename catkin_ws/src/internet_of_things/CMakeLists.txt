@@ -22,5 +22,7 @@ target_link_libraries(baby_monitor ${catkin_LIBRARIES})
 catkin_install_python(PROGRAMS src/voice_recognition.py DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
 catkin_install_python(PROGRAMS src/mamaRoo_bt_controller.py DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
 catkin_install_python(PROGRAMS src/origami_network_controller.py DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
+catkin_install_python(PROGRAMS src/gui.py DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
+catkin_install_python(PROGRAMS src/motion_detector.py DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
 
 
