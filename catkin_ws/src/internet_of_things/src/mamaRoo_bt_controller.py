@@ -186,7 +186,7 @@ class MamaRoo_BTController():
         if msg.data == "START MOVING":
             self.mamaRoo_send_command(APP_CMD_MOTION_ENABLE, 1)
         if msg.data == "TERMINATE MOTION":
-            self.mamaRoo_send_command(APP_CMD_MOTION_ENABLE, 0)
+            self.mamaRoo_send_command(APP_CMD_POWER, 0)
         if msg.data == "SPEED FIVE":
             self.mamaRoo_send_command(APP_CMD_SPEED, 5)
         if msg.data == "MOTION KANGAROO":

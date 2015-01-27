@@ -7,7 +7,7 @@ import socket
 import sys
 import time
 
-SERVER_IP = "10.10.10.181"
+SERVER_IP = "10.0.0.4"
 #SERVER_IP = "localhost"
 
 SERVER_PORT = 10000

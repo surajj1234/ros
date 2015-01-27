@@ -30,8 +30,8 @@ class Baby_Monitor
         imagePub = it.advertise("baby_monitor/baby_monitor_image", 1);
 
         // Open webcam for image acquisition
-        cap = cv::VideoCapture(CV_CAP_ANY);
-        //cap = cv::VideoCapture(1);
+        //cap = cv::VideoCapture(CV_CAP_ANY);
+        cap = cv::VideoCapture(1);
         cap.set(CV_CAP_PROP_FRAME_WIDTH, 640);
         cap.set(CV_CAP_PROP_FRAME_HEIGHT, 480);
 
