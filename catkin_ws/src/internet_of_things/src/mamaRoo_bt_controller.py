@@ -5,6 +5,7 @@ from std_msgs.msg import String
 import BTDongle
 import MySerial
 import time
+import sys
 
 DEFAULT_COM_PORT_LINUX = "/dev/ttyACM0"
 DEFAULT_COM_PORT_WIN = 25
@@ -34,6 +35,10 @@ DO_NOTHING = 4
 STATUS_MAMAROO_CONNECTED = "mamaRoo_connected"
 STATUS_MAMAROO_DISCONNECTED = "mamaRoo_disconnected"
 
+MAMAROO_CMD_START_MOVING = "START MOVING" 
+MAMAROO_CMD_STOP_MOVING = "STOP MOVING"
+MAMAROO_CMD_WAKEUP = "POWER ON"
+MAMAROO_CMD_POWER_OFF = "POWER OFF"
 
 class MamaRoo_BTController():
 
@@ -44,6 +49,8 @@ class MamaRoo_BTController():
         rospy.on_shutdown(self.shutdown)
         
         rospy.Subscriber('voice_recognition/voice_commands', String, self.speech_callback)
+        rospy.Subscriber('motion_detector/mamaRoo_commands', String, self.motion_detector_callback)
+        
         self.statusPub = rospy.Publisher('mamaRoo_bt_controller/status', String, queue_size = 3)
 
         self.init_BT()
@@ -191,7 +198,22 @@ class MamaRoo_BTController():
             self.mamaRoo_send_command(APP_CMD_SPEED, 5)
         if msg.data == "MOTION KANGAROO":
             self.mamaRoo_send_command(APP_CMD_MOTION, 2)
+    
+    def motion_detector_callback(self, msg):
 
+        if msg.data == MAMAROO_CMD_START_MOVING:
+            self.mamaRoo_send_command(APP_CMD_MOTION_ENABLE, 1)
+        
+        elif msg.data == MAMAROO_CMD_STOP_MOVING:
+            self.mamaRoo_send_command(APP_CMD_MOTION_ENABLE, 0)
+
+        elif  msg.data == MAMAROO_CMD_POWER_OFF:
+            self.mamaRoo_send_command(APP_CMD_POWER, 0)
+
+        elif  msg.data == MAMAROO_CMD_WAKEUP:
+            self.mamaRoo_send_command(APP_CMD_POWER, 1)
+
+    
     def mamaRoo_send_command(self, command, value):
 
         handle = HANDLE_MAMAROO_WRITE       # Handle for "data pipeline" characteristic on the mamaRoo BT device

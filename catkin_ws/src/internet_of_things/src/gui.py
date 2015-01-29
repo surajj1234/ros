@@ -21,7 +21,7 @@ DEMO_VR_DISABLE = "demo_vr_disable"
 DEMO_ML_ENABLE = "demo_ml_enable" 
 DEMO_ML_DISABLE = "demo_ml_disable" 
 
-TOGGLE_DEBUG_IMAGE = "toggle_debug_image"
+ENABLE_DEBUG_IMAGE = "toggle_debug_image"
 
 STATUS_VR_WORKING = "vr_working"
 STATUS_MAMAROO_CONNECTED = "mamaRoo_connected"
@@ -29,6 +29,8 @@ STATUS_MAMAROO_DISCONNECTED = "mamaRoo_disconnected"
 STATUS_ORIGAMI_CONNECTED = "origami_connected"
 STATUS_ORIGAMI_DISCONNECTED = "origami_disconnected"
 
+BABY_SLEEPING_STATE = "0" 
+BABY_AWAKE_STATE = "1"
 
 class DemoGUI(QtGui.QMainWindow):
 
@@ -61,7 +63,6 @@ class DemoGUI(QtGui.QMainWindow):
         self.newStatusSignal.connect(self.update_status_indicators)
 
         self.ui.demoComboBox.activated[str].connect(self.select_demo)
-        self.ui.debugImageButton.clicked.connect(self.toggle_debug_image)
         
         self.setWindowTitle('4moms Baby Monitor')
         self.show()
@@ -75,7 +76,8 @@ class DemoGUI(QtGui.QMainWindow):
         self.vrStatusSub = rospy.Subscriber("voice_recognition/status", String, self.vr_status_callback)
         self.mamaRooStatusSub = rospy.Subscriber("mamaRoo_bt_controller/status", String, self.mamaRoo_status_callback)
         self.origamiStatusSub = rospy.Subscriber("origami_network_controller/status", String, self.origami_status_callback)
-        
+        self.motionDetectorSub = rospy.Subscriber("motion_detector/motion_status", String, self.motion_detector_callback)
+
         self.vrPub = rospy.Publisher('gui/vr_config', String, queue_size = 3)
         self.mlPub = rospy.Publisher('gui/ml_config', String, queue_size = 3)
     
@@ -123,9 +125,6 @@ class DemoGUI(QtGui.QMainWindow):
             self.vrPub.publish(DEMO_VR_DISABLE)
             self.mlPub.publish(DEMO_ML_ENABLE)
 
-    def toggle_debug_image(self):
-        self.mlPub.publish(TOGGLE_DEBUG_IMAGE)
-
     def vr_status_callback(self, msg):
 
         if msg.data == STATUS_VR_WORKING:
@@ -149,6 +148,17 @@ class DemoGUI(QtGui.QMainWindow):
         elif msg.data == STATUS_ORIGAMI_DISCONNECTED:
             self.origamiStatus = "Disconnected"
             self.newStatusSignal.emit()
+
+    def motion_detector_callback(self, msg):
+       
+        motionStatus = msg.data.split(",")
+        
+        if motionStatus[0] == BABY_AWAKE_STATE:
+            self.ui.babyStateLabel.setText("BABY AWAKE")
+        elif motionStatus[0] == BABY_SLEEPING_STATE:
+            self.ui.babyStateLabel.setText("BABY SLEEPING")
+
+        self.ui.timeoutLabel.setText(motionStatus[1])
 
     def update_status_indicators(self):
             
